@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: Task Organizer - with OpenAPI 3.0
+  description: Organize and maintain tasks
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://localhost:5000
+tags:
+- name: swagger example
+  description: Organize and maintain tasks
+paths:
+  /tasks:
+    get:
+      tags:
+      - tasks
+      summary: Returns a list of tasks.
+      description: Optional extended description in Markdown.
+      operationId: tasks_get
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "405":
+          description: Invalid Input
+      x-openapi-router-controller: swagger_server.controllers.tasks_controller
+  /task:
+    post:
+      tags:
+      - task
+      summary: Adding task to list
+      operationId: task_post
+      requestBody:
+        description: Created task object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Task'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        "200":
+          description: OK
+      x-openapi-router-controller: swagger_server.controllers.task_controller
+  /task/{taskname}:
+    get:
+      tags:
+      - task name
+      summary: Returns a task by name.
+      operationId: task_taskname_get
+      parameters:
+      - name: taskname
+        in: path
+        description: Name of the task to be obtained
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully fetched task
+      x-openapi-router-controller: swagger_server.controllers.task_name_controller
+    delete:
+      tags:
+      - task name
+      summary: Delete a task by name.
+      operationId: task_taskname_delete
+      parameters:
+      - name: taskname
+        in: path
+        description: Name of the task to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      x-openapi-router-controller: swagger_server.controllers.task_name_controller
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Task name
+        description:
+          type: string
+          description: Description of the task
+
